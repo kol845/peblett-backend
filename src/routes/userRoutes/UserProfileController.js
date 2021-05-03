@@ -3,7 +3,7 @@ const errorCodes = require('../../constant/errorCodes');
 
 const { validationResult } = require('express-validator');
 const dbHandler = require('../../model/dbHandler')
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const jwsHandler = require("../../cors/middleware")
 
 
