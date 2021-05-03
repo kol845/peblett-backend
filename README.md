@@ -5,11 +5,11 @@
 
 - Create a wallet. Receive and transfer ETH.
 
-- A REST API created with Express
+- A REST API created with NodeJS - Express
 
 - Uses MySQL
 
-- Deployed on AWS
+- Deployed on Heroku
 
 ## Testing Locally
 
