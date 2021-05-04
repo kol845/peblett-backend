@@ -21,6 +21,8 @@ require('./routes')(app);
 const dir = path.join(__dirname, 'assets');
 app.use('/upload', express.static(dir));
 
+app.use(express.json())
+
 // const port = process.env.PORT || config.port
 const port = process.env.PORT || 4100
 const start = () => (

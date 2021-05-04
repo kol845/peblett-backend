@@ -9,8 +9,33 @@
 
 - Uses MySQL
 
-- Deployed on Heroku
+- Deployed on AWS and Heroku
+    - AWS: http://peblett2-env.eba-nv3dgmk2.us-east-2.elasticbeanstalk.com/
+    - Heroku: https://peblett.herokuapp.com/
 
+### REST API
+
+Parameters are stored in JSON format in request body. Token is stored in header under 'x-access-token'
+
+* **/v1/user/register**
+    - Params:
+        - uname : <username>
+        - password : <password>
+        - email : <email>
+    - Output:
+        - success/fail message
+* **/v1/user/login**
+    - Input:
+        - uname : <username>
+        - password : <password>
+    - Output:
+        - success/error message
+        - new token
+* **/v1/user/create-wallet**
+    - Input:
+        - token : <token> (placed in header!)
+    - Output:
+        - success/error message
 ## Testing Locally
 
 ### Database setup

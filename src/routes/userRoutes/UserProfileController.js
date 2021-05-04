@@ -14,7 +14,7 @@ module.exports = {
 		if (!errors.isEmpty())
 			return respHandler.errorResponse(res, error=errors.errors[0].msg, effectedParam=errors.errors[0].param)
 		
-		let params = req.query;
+		let params = req.body;
 		try {
 			let user = await dbHandler.getUser(params.uname);
 			if (bcrypt.compareSync(params.password, user.passwd)){
@@ -33,7 +33,7 @@ module.exports = {
 		if (!errors.isEmpty()){
 			return respHandler.errorResponse(res, error=errors.errors[0].msg, effectedParam=errors.errors[0].param)
 		}
-		let params = req.query;
+		let params = req.body;
 		let uname = params.uname;
 		let email = params.email;
 		
