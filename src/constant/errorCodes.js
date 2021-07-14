@@ -21,7 +21,7 @@ const errorCodes = {
     },
     EMAIL_INVALID: {
         code: 'EMAIL_INVALID',
-        message: 'The given email is not a email',
+        message: 'The given email is not a valid email',
         status: '400'
     },
     PARAMETER_TOO_LONG: {
@@ -48,6 +48,11 @@ const errorCodes = {
         code: 'UNKNOWN_ERROR',
         message: 'A Unknown error occured',
         status: '500'
+    },
+    UNKNOWN_RESOURCE_REQUEST: {
+        code: 'UNKNOWN_RESOURCE_REQUEST',
+        message: 'The requested resource was not found',
+        status: '400'
     },
 }
 module.exports = errorCodes;

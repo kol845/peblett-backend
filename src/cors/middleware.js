@@ -10,6 +10,7 @@ module.exports = {
 let key = process.env.JWT_SECRET || "E{akw=3v9'8Q/dv]7zCb^*gqGiNc6UwCu`j@##hytP"
 
 function provideToken(user){
+  console.log("ASS PUSSY")
   var token = jwt.sign({ id: user.id }, key, {
     expiresIn: 86400 // expires in 24 hours
   });

@@ -18,22 +18,25 @@
 Parameters are stored in JSON format in request body. Token is stored in header under 'x-access-token'
 
 * **/v1/user/register**
+    - HTTP method: POST
     - Params:
-        - uname : <username>
-        - password : <password>
-        - email : <email>
+        - uname : \<username>
+        - password : \<password>
+        - email : \<email>
     - Output:
         - success/fail message
 * **/v1/user/login**
+    - HTTP method: POST
     - Input:
-        - uname : <username>
-        - password : <password>
+        - uname : \<username>
+        - password : \<password>
     - Output:
         - success/error message
         - new token
 * **/v1/user/create-wallet**
+    - HTTP method: POST
     - Input:
-        - token : <token> (placed in header!)
+        - x-access-token : \<token> (placed in header)
     - Output:
         - success/error message
 ## Testing Locally
