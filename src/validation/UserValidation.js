@@ -28,4 +28,11 @@ module.exports = {
       check("password", errorCodes.PARAMETER_TOO_LONG.code).isLength({ max: 256 }),
     ]
   },
+  createWallet: () => {
+    return [
+      check("password", errorCodes.PARAMETER_MISSING.code).exists(),
+      check("password", errorCodes.PARAMETER_EMPTY.code).not().isEmpty(),
+      check("password", errorCodes.PARAMETER_TOO_LONG.code).isLength({ max: 256 }),
+    ]
+  },
 }

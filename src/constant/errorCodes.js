@@ -34,6 +34,11 @@ const errorCodes = {
         message: 'Invalid login credentials. Please ensure that you have written your username and password correctly',
         status: '400'
     },
+    USER_NOT_FOUND: {
+        code: 'USER_NOT_FOUND',
+        message: 'User ID was not found in database',
+        status: '400'
+    },
     TOKEN_MISSING: {
         code: 'TOKEN_MISSING',
         message: 'Token not found in request parameter',

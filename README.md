@@ -37,6 +37,7 @@ Parameters are stored in JSON format in request body. Token is stored in header 
     - HTTP method: POST
     - Input:
         - x-access-token : \<token> (placed in header)
+        - password: \<password>
     - Output:
         - success/error message
 ## Testing Locally

@@ -3,27 +3,26 @@ const errorCodes = require('../constant/errorCodes')
 
 
 module.exports = {
-    getUser: async (uname, passwd) => {
-      return new Promise((resolve, reject)=>{
-        let db = dbUtils.getDB();
-        let sql = `
-        SELECT * FROM user WHERE uname =?;
-        `
-        db.query(sql, [uname], (err, result) =>{
-          if(err) {
-            throw err;
-          }
-          if(result.length>0){
-            resolve(result[0])
-          }else{
-            reject(errorCodes.UNSUCCESSFUL_LOGIN.code)
-          }
-        })
-        })
-      
-    },
-    registerUser: async (uname, email, passwd) => {
-      return new Promise((resolve, reject)=>{
+  getUser: async (userId) => {
+    return new Promise((resolve, reject)=>{
+      let db = dbUtils.getDB();
+      let sql = `
+      SELECT * FROM user WHERE id =?;
+      `
+      db.query(sql, [userId], (err, result) =>{
+        if(err) {
+          throw err;
+        }
+        if(result.length>0){
+          resolve(result[0])
+        }else{
+          reject(errorCodes.USER_NOT_FOUND.code)
+        }
+      })
+      })
+  },
+  getUserWithUname: async (uname) => {
+    return new Promise((resolve, reject)=>{
       let db = dbUtils.getDB();
       let sql = `
       SELECT * FROM user WHERE uname =?;
@@ -32,27 +31,42 @@ module.exports = {
         if(err) {
           throw err;
         }
-        if(result.length>0){// Duplicate username error
-          reject(errorCodes.DUPLICATE_USER_ERROR.code)
+        if(result.length>0){
+          resolve(result[0])
         }else{
-          
-          sql = `
-          INSERT INTO user(uname,email,passwd) VALUES (?,?,?);
-          `
-          db.query(sql, [uname, email, passwd], (err, result) =>{
-            if(err) {
-              if(err.errno === 1062){ // Duplicate email error
-                reject(errorCodes.DUPLICATE_EMAIL_ERROR.code)
-              }
-            }
-            resolve(200)
-          })
+          reject(errorCodes.UNSUCCESSFUL_LOGIN.code)
         }
       })
       })
-
-
-
+  },
+  registerUser: async (uname, email, passwd) => {
+    return new Promise((resolve, reject)=>{
+    let db = dbUtils.getDB();
+    let sql = `
+    SELECT * FROM user WHERE uname =?;
+    `
+    db.query(sql, [uname], (err, result) =>{
+      if(err) {
+        throw err;
+      }
+      if(result.length>0){// Duplicate username error
+        reject(errorCodes.DUPLICATE_USER_ERROR.code)
+      }else{
+        
+        sql = `
+        INSERT INTO user(uname,email,passwd) VALUES (?,?,?);
+        `
+        db.query(sql, [uname, email, passwd], (err, result) =>{
+          if(err) {
+            if(err.errno === 1062){ // Duplicate email error
+              reject(errorCodes.DUPLICATE_EMAIL_ERROR.code)
+            }
+          }
+          resolve(200)
+        })
+      }
+    })
+    })
     },
   }
 

@@ -2,33 +2,48 @@ const mysql = require('mysql');
 
 var _db;
 
-const checkIfTableExist= ()=>{
-  const sql = `SHOW TABLES LIKE 'user';`
+const checkIfTableExist= (table)=>{
+  const sql = `SHOW TABLES LIKE '${table}';`
   _db.query(sql, (err, result)=>{
     if (err) throw err;
     if(result.length === 0){
-      console.log("User table was not found. Creating table...")
-      createTable(); 
+      console.log(`${table} table was not found. Creating table...`)
+      createTable(table); 
     }
   })
 }
-const createTable = ()=>{
-  const sql = `
-    CREATE TABLE user (
-      id int NOT NULL AUTO_INCREMENT,
-      uname varchar(128) NOT NULL UNIQUE,
-      email varchar(128) NOT NULL UNIQUE,
-      passwd varchar(256) NOT NULL,
-      wallet varchar(256),
-      rec_phrase varchar(256),
-      created_at timestamp default current_timestamp,
-      updated_at timestamp,
-      PRIMARY KEY (id)
-    )`
-  _db.query(sql, (err, result)=>{
-    if(err) throw err;
-    console.log("User table succesfully created!")
-  })
+
+const createTable = (table)=>{
+  let sql;
+  if(table == "user")
+    sql = `
+      CREATE TABLE user (
+        id int NOT NULL AUTO_INCREMENT,
+        uname varchar(128) NOT NULL UNIQUE,
+        email varchar(128) NOT NULL UNIQUE,
+        passwd varchar(256) NOT NULL,
+        wallet int,
+        created_at timestamp default current_timestamp,
+        updated_at timestamp,
+        PRIMARY KEY (id)
+      )`
+  else if (table=="wallet")
+    sql = `
+      CREATE TABLE wallet (
+        id int NOT NULL AUTO_INCREMENT,
+        private_key varchar(128) NOT NULL UNIQUE,
+        mnomic varchar(256) NOT NULL UNIQUE,
+        userID int UNIQUE,
+        created_at timestamp default current_timestamp,
+        updated_at timestamp,
+        PRIMARY KEY (id)
+      )`
+  if(sql)
+    _db.query(sql, (err, result)=>{
+      if(err) throw err;
+      console.log(`${table} table succesfully created!`)
+    })
+
 }
 
 module.exports = {
@@ -77,7 +92,8 @@ module.exports = {
             setTimeout(dbConnection, 5000); // Try DB connection again after 5 sec
           } else {
             _db = con // make db 'con' available for whole app
-            checkIfTableExist();
+            checkIfTableExist("user");
+            checkIfTableExist("wallet");
             callback();
           }
         });

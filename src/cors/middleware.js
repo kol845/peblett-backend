@@ -4,17 +4,25 @@ const errorCodes = require("../constant/errorCodes")
 
 module.exports = {
   checkToken,
-  provideToken
+  provideToken,
+  decodeToken
 }
 
 let key = process.env.JWT_SECRET || "E{akw=3v9'8Q/dv]7zCb^*gqGiNc6UwCu`j@##hytP"
 
 function provideToken(user){
-  console.log("ASS PUSSY")
   var token = jwt.sign({ id: user.id }, key, {
     expiresIn: 86400 // expires in 24 hours
   });
   return token;
+}
+async function decodeToken(token){
+  try{
+    return await jwt.verify(token, key);
+  }catch(e){
+    reqResponse.errorResponse(res, errorCodes.TOKEN_ERROR.code)
+  }
+  
 }
 function checkToken(req, res, next) {
   let token = req.headers['x-access-token'] || req.headers['authorization'];

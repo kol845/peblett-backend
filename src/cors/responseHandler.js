@@ -34,7 +34,7 @@ let successResponse = (res, status, succMessage, data) => {
 		* @param {number} statusCode - Error Status Code
 	*/
 let errorResponse = (res, error, effectedParam) => {
-	console.log("Error Occured: " + error)
+	console.log("Error Occured: " + error.stack)
 
 	let errorObj = errorCodes[error];
 	if(!errorObj){
