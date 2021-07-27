@@ -1,7 +1,7 @@
 'use strict';
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('wallet', {
+    await queryInterface.createTable('user', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -10,20 +10,23 @@ module.exports = {
       },
       uuid:{
         type: DataTypes.UUID,
-        defaultValue: DataTypes.UUIDV4
+        defaultValue: DataTypes.UUIDV4,
+        unique: true
       },
-      privateKey:{
+      uname: {
+        type:DataTypes.STRING,
+        allowNull:false,
+        unique: true
+      },
+      email: {
+        type:DataTypes.STRING,
+        allowNull:false,
+        unique: true
+      },
+      passwd: {
         type:DataTypes.STRING,
         allowNull:false
       },
-      userId:{
-        type:DataTypes.INTEGER,
-        allowNull:true
-      },
-      mnemonic:{
-        type:DataTypes.STRING,
-        allowNull:false
-      },  
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
@@ -35,6 +38,6 @@ module.exports = {
     });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('wallet');
+    await queryInterface.dropTable('user');
   }
 };

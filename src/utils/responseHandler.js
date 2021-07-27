@@ -1,7 +1,7 @@
 // 4XX status code related to client side error
 // 5XX status code related to server side error
 
-const errorCodes = require("../constant/errorCodes")
+const errorCodes = require("../constants/errorCodes")
 
 
 

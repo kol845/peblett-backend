@@ -1,5 +1,5 @@
 const { body, check } = require('express-validator');
-const errorCodes = require('../constant/errorCodes');
+const errorCodes = require('../constants/errorCodes');
 
 module.exports = {
   login: () => {

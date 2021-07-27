@@ -4,14 +4,13 @@ const cors = require('cors');
 const app = express();
 const pack = require('../package');
 const path = require('path');
-const db = require('./models')
+const dbHandler = require('./database/dbHandler');
+const { WatchDirectoryKind } = require('typescript');
 // if NODE_ENV value not define then dev value will be assign 
 mode = process.env.NODE_ENV || 'dev';
 
 // mode can be access anywhere in the project
 // const config = require('config').get(mode);
-
-const dbUtils = require('./utils/dbUtils');
 
 app.use(cors());
 
@@ -40,12 +39,15 @@ const start = () => (
 );
 
 // Sequelize code
-// const main = async () =>{
-//   await db.sequelize.sync({force:true})
-//   start()
-// }
-// main()
+const main = async () =>{
+  await dbHandler.authenticate()
+  start()
+}
 
-dbUtils.connectDB(start)
+
+
+
+main()
+
 
 

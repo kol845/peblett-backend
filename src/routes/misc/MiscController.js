@@ -1,10 +1,5 @@
 const respHandler = require('../../utils/responseHandler');
-const errorCodes = require('../../constant/errorCodes');
-
-const { validationResult } = require('express-validator');
-const dbHandler = require('../../model/dbHandler')
-const bcrypt = require("bcryptjs");
-const jwsHandler = require("../../utils/middleware")
+const errorCodes = require('../../constants/errorCodes');
 
 
 module.exports = {

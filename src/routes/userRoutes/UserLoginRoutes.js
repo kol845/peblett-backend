@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const UserProfileController = require('./UserProfileController');
-const RouteConstant = require('../../constant/Routes');
+const RouteConstant = require('../../constants/Routes');
 const Validation = require('../../validation/UserValidation')
 
 

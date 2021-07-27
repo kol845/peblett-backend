@@ -1,9 +1,9 @@
 const respHandler = require('../../utils/responseHandler');
-const errorCodes = require('../../constant/errorCodes');
+const errorCodes = require('../../constants/errorCodes');
 
 const { validationResult } = require('express-validator');
-const dbHandler = require('../../model/dbHandler')
-const etherHandler = require('../../model/etherHandler')
+const dbHandler = require('../../database/dbHandler')
+const etherHandler = require('../../utils/etherHandler')
 
 const bcrypt = require("bcryptjs");
 const jwsHandler = require("../../utils/middleware")
@@ -12,15 +12,17 @@ const jwsHandler = require("../../utils/middleware")
 Validates username and password.
 */
 const validateLogin = async (uname, passwd) =>{
-	
-	let storedUser = await dbHandler.getUserWithUname(uname);
-	if (bcrypt.compareSync(passwd, storedUser.passwd)){
-		const token = jwsHandler.provideToken(storedUser)
-		return token
-	}else{
+	try{
+		let storedUser = await dbHandler.getUserWithUname(uname);
+		if (bcrypt.compareSync(passwd, storedUser.passwd)){
+			const token = jwsHandler.provideToken(storedUser)
+			return token
+		}else{
+			throw errorCodes.UNSUCCESSFUL_LOGIN.code
+		}
+	}catch(err){
 		throw errorCodes.UNSUCCESSFUL_LOGIN.code
 	}
-
 }
 
 
@@ -64,8 +66,9 @@ module.exports = {
 		let passwd = params["password"]
 
 		let token = req.headers['x-access-token'] || req.headers['authorization'];
+		let decodedToken;
 		try{
-			const decodedToken = await jwsHandler.decodeToken(token)
+			decodedToken = await jwsHandler.decodeToken(token)
 		}catch(error){
 			return respHandler.errorResponse(res, errorCodes.TOKEN_ERROR.code)
 		}

@@ -1,6 +1,6 @@
 let jwt = require('jsonwebtoken');
 const reqResponse = require('./responseHandler');
-const errorCodes = require("../constant/errorCodes")
+const errorCodes = require("../constants/errorCodes")
 
 module.exports = {
   checkToken,
