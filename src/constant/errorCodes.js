@@ -59,5 +59,10 @@ const errorCodes = {
         message: 'The requested resource was not found',
         status: '400'
     },
+    INTERNAL_SERVER_ERROR: {
+        code: 'INTERNAL_SERVER_ERROR',
+        message: 'A internal server error occured',
+        status: '500'
+    },
 }
 module.exports = errorCodes;

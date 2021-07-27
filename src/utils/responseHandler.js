@@ -8,45 +8,51 @@ const errorCodes = require("../constant/errorCodes")
 
 /**
 		* Success Reposnse.
-		* @param {number} status - Success response status
+		* @param {Response} res - Express response object
+		* @param {number} status - Success response status code
 		* @param {string} succMessage - Success response message
 		* @param {any} data - Success response custom data
 	*/
 let successResponse = (res, status, succMessage, data) => {
-	res.status(201)
-	res.send(
-		{
-			status,
-			message: succMessage,
-			data
-		}
-	)
-	return {
+	res.status(status)
+	let respObject =  		{
 		status,
 		message: succMessage,
-		data
+		data,
+	}
+	res.send(
+		respObject
+	)
+	return {
+		...respObject,
+		isError:false
 	}
 }
 
 /**
-		* Error Reposnse.
-		* @param {Response} res - Send error response
-		* @param {number} statusCode - Error Status Code
-	*/
+	* Error Reposnse.
+	* @param {Response} res - Express response object
+	* @param {string} error - Error Status Code
+	* @param {string} effectedParam - Name of parameter that caused error
+*/
 let errorResponse = (res, error, effectedParam) => {
-	console.log("Error Occured: " + error.stack)
+	const errorMsg = error.stack ? error.stack : error
+	console.log("Error occured: " + errorMsg)
 
 	let errorObj = errorCodes[error];
 	if(!errorObj){
-		console.log("Error object not found! Error code probebly misspelled somewhere.")
-		return
+		errorObj = errorCodes["INTERNAL_SERVER_ERROR"];
+		console.log(errorObj)
 	}
 	res.status(errorObj.status)
 	if(effectedParam){
 		errorObj = {...errorObj, parameter:effectedParam}
 	}
 	res.send(errorObj)
-	
+	return {
+		...errorObj,
+		isError:true
+	}
 }
 
 

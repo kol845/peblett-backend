@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const UserProfileController = require('./UserProfileController');
 const RouteConstant = require('../../constant/Routes');
-const checkToken = require('../../cors/middleware').checkToken;
+const checkToken = require('../../utils/middleware').checkToken;
 const Validation = require('../../validation/UserValidation')
 
 

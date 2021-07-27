@@ -1,4 +1,4 @@
-const respHandler = require('../../cors/responseHandler');
+const respHandler = require('../../utils/responseHandler');
 const errorCodes = require('../../constant/errorCodes');
 
 const { validationResult } = require('express-validator');
@@ -6,23 +6,21 @@ const dbHandler = require('../../model/dbHandler')
 const etherHandler = require('../../model/etherHandler')
 
 const bcrypt = require("bcryptjs");
-const jwsHandler = require("../../cors/middleware")
+const jwsHandler = require("../../utils/middleware")
 
 /*
 Validates username and password.
 */
 const validateLogin = async (uname, passwd) =>{
-	try {
-		let storedUser = await dbHandler.getUserWithUname(uname);
-		if (bcrypt.compareSync(passwd, storedUser.passwd)){
-			const token = jwsHandler.provideToken(storedUser)
-			return {valid:true, token:token}
-		}else{
-			return {valid:false, error:errorCodes.UNSUCCESSFUL_LOGIN.code}
-		}
-	} catch (error) {
-		return {valid:false, error:error}
+	
+	let storedUser = await dbHandler.getUserWithUname(uname);
+	if (bcrypt.compareSync(passwd, storedUser.passwd)){
+		const token = jwsHandler.provideToken(storedUser)
+		return token
+	}else{
+		throw errorCodes.UNSUCCESSFUL_LOGIN.code
 	}
+
 }
 
 
@@ -33,10 +31,11 @@ module.exports = {
 			return respHandler.errorResponse(res, error=errors.errors[0].msg, effectedParam=errors.errors[0].param)
 
 		let params = req.body;
-		const validationRes = await validateLogin(params.uname, params.password)
-		if(validationRes.valid == true) return respHandler.successResponse(res, 200, "User login successful", validationRes.token)
-		else{
-			return respHandler.errorResponse(res, validationRes.error);
+		try{
+			const validationRes = await validateLogin(params.uname, params.password)
+			return respHandler.successResponse(res, 200, "User login successful", validationRes)
+		}catch(err){
+			return respHandler.errorResponse(res, error=err)
 		}
 	},
 	register: async (req, res) => {
@@ -54,8 +53,7 @@ module.exports = {
 			await dbHandler.registerUser(uname=uname, email=email, passwd=hash);
 			return respHandler.successResponse(res, 201, "New user successufully created")
 		} catch (errCode) {
-			respHandler.errorResponse(res, errCode)
-			
+			return respHandler.errorResponse(res, errCode)
 		}
 	},
 	createWallet: async (req, res) => {
@@ -66,24 +64,24 @@ module.exports = {
 		let passwd = params["password"]
 
 		let token = req.headers['x-access-token'] || req.headers['authorization'];
-		const decodedToken = await jwsHandler.decodeToken(token)
+		try{
+			const decodedToken = await jwsHandler.decodeToken(token)
+		}catch(error){
+			return respHandler.errorResponse(res, errorCodes.TOKEN_ERROR.code)
+		}
 		const userId = decodedToken.id
-
 		try{
 			const user = await dbHandler.getUser(userId)
-		
-			const validationRes = await validateLogin(user.uname, passwd)
-			if(validationRes.valid == true) {
-				const wallet = etherHandler.createWallet();
-				return respHandler.successResponse(res, 201, "Wallet sucessfully created!")	
+			try{
+				await validateLogin(user.uname, params.password)
+			}catch(err){
+				return respHandler.errorResponse(res, error=err)
 			}
-			else{
-				return respHandler.errorResponse(res, validationRes.error);
-			}
+			const wallet = etherHandler.createWallet();
+			return respHandler.successResponse(res, 201, "Wallet sucessfully created!")	
 
-
-		}catch(error){
-			return respHandler.errorResponse(res, error)
+		}catch(err){
+			return respHandler.errorResponse(res, err)
 		}
 
 	

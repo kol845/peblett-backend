@@ -17,12 +17,7 @@ function provideToken(user){
   return token;
 }
 async function decodeToken(token){
-  try{
-    return await jwt.verify(token, key);
-  }catch(e){
-    reqResponse.errorResponse(res, errorCodes.TOKEN_ERROR.code)
-  }
-  
+  return jwt.verify(token, key);
 }
 function checkToken(req, res, next) {
   let token = req.headers['x-access-token'] || req.headers['authorization'];

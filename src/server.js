@@ -4,6 +4,7 @@ const cors = require('cors');
 const app = express();
 const pack = require('../package');
 const path = require('path');
+const db = require('./models')
 // if NODE_ENV value not define then dev value will be assign 
 mode = process.env.NODE_ENV || 'dev';
 
@@ -13,6 +14,7 @@ mode = process.env.NODE_ENV || 'dev';
 const dbUtils = require('./utils/dbUtils');
 
 app.use(cors());
+
 
 // use only when you want to see the metric related to express app
 // app.use(require('express-status-monitor')());
@@ -36,6 +38,13 @@ const start = () => (
     console.log(chalk.yellow('.......................................'));
   })
 );
+
+// Sequelize code
+// const main = async () =>{
+//   await db.sequelize.sync({force:true})
+//   start()
+// }
+// main()
 
 dbUtils.connectDB(start)
 
