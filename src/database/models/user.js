@@ -1,8 +1,9 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
+import { Model } from 'sequelize-typescript'
+
+// 'use strict';
+// const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
+  @Table
   class User extends Model {
     /**
      * Helper method for defining associations.

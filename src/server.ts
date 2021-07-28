@@ -1,13 +1,14 @@
-const express = require('express');
-const chalk = require('chalk'); // Allows styled console logs
-const cors = require('cors');
-const app = express();
-const pack = require('../package');
-const path = require('path');
-const dbHandler = require('./database/dbHandler');
-const { WatchDirectoryKind } = require('typescript');
+import express, { Application } from 'express';
+import cors from 'cors';
+import chalk from 'chalk';
+import pack from '../package.json';
+import path from 'path';
+import dbHandler from './database/dbHandler';
+
+const app:Application = express();
+
 // if NODE_ENV value not define then dev value will be assign 
-mode = process.env.NODE_ENV || 'dev';
+const mode:string = process.env.NODE_ENV || 'dev';
 
 // mode can be access anywhere in the project
 // const config = require('config').get(mode);

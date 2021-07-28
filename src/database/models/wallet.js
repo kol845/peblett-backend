@@ -1,8 +1,7 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
+import { Model } from 'sequelize-typescript'
+
 module.exports = (sequelize, DataTypes) => {
+  @Table
   class Wallet extends Model {
     /**
      * Helper method for defining associations.

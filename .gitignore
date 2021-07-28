@@ -4,3 +4,4 @@ package-lock.json
 !*/upload/.gitkeep
 notes
 .vscode
+build
