@@ -1,22 +1,35 @@
-import { Model } from 'sequelize-typescript'
+import { Model } from 'sequelize';
 
-module.exports = (sequelize, DataTypes) => {
-  @Table
-  class Wallet extends Model {
+import { Wallet as WalletType } from '../../constants/types'
+
+
+'use strict';
+module.exports = (sequelize:any, DataTypes:any) => {
+  class Wallet extends Model<WalletType> 
+  implements WalletType {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
-    static associate({ User }) {
+    id!:number;
+    uuid!: string;
+    privateKey!: string;
+    mnemonic!: string;
+    static associate(models: any) {
       // define association here
-      this.belongsTo(User, { foreignKey: "userId" })
+      Wallet.belongsTo(models.User, {constraints: false})
     }
     toJson(){
       return { ...this.get(), id:undefined} // remove ID from object
     }
   };
   Wallet.init({
+    id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true
+    },
     uuid:{
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4,

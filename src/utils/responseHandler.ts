@@ -1,8 +1,11 @@
 // 4XX status code related to client side error
 // 5XX status code related to server side error
 
-const errorCodes = require("../constants/errorCodes")
 
+
+import { errorCodes } from '../constants/errorCodes'
+
+import {Request, Response} from 'express';
 
 
 
@@ -13,7 +16,7 @@ const errorCodes = require("../constants/errorCodes")
 		* @param {string} succMessage - Success response message
 		* @param {any} data - Success response custom data
 	*/
-let successResponse = (res, status, succMessage, data) => {
+let successResponse = (res:Response, status:number, succMessage:string, data:any) => {
 	res.status(status)
 	let respObject =  		{
 		status,
@@ -35,16 +38,16 @@ let successResponse = (res, status, succMessage, data) => {
 	* @param {string} error - Error Status Code
 	* @param {string} effectedParam - Name of parameter that caused error
 */
-let errorResponse = (res, error, effectedParam) => {
+let errorResponse = (res:Response, error:Error|any, effectedParam?:string) => {
 	const errorMsg = error.stack ? error.stack : error
 	console.log("Error occured: " + errorMsg)
 
-	let errorObj = errorCodes[error];
+	let errorObj:any = errorCodes[error];
 	if(!errorObj){
 		errorObj = errorCodes["INTERNAL_SERVER_ERROR"];
 		console.log(errorObj)
 	}
-	res.status(errorObj.status)
+	res.status(parseInt(errorObj.status))
 	if(effectedParam){
 		errorObj = {...errorObj, parameter:effectedParam}
 	}

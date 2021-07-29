@@ -1,24 +1,36 @@
-import { Model } from 'sequelize-typescript'
+import { Model } from 'sequelize';
 
-// 'use strict';
-// const { Model } = require('sequelize');
-module.exports = (sequelize, DataTypes) => {
-  @Table
-  class User extends Model {
+import { User as UserType } from '../../constants/types'
+
+'use strict';
+module.exports = (sequelize:any, DataTypes:any) => {
+  class User extends Model<UserType> 
+  implements UserType {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
-    static associate({ Wallet }) {
+    id!:number;
+    uuid!: string;
+    uname!: string;
+    email!: string;
+    passwd!: string;
+
+    static associate(models: any) {
       // define association here
-      this.hasOne(Wallet, { foreignKey: 'userId', as:'wallets' })
+      User.hasOne(models.Wallet, {constraints: false})
     }
     toJson(){
       return { ...this.get(), id:undefined} // remove ID from object
     }
   };
   User.init({
+    id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true
+    },
     uuid:{
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4,

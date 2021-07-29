@@ -18,9 +18,10 @@ app.use(cors());
 
 // use only when you want to see the metric related to express app
 // app.use(require('express-status-monitor')());
+import routes from './routes'
+routes(app)
 
-require('./routes')(app);
-const dir = path.join(__dirname, 'assets');
+const dir:string = path.join(__dirname, 'assets');
 app.use('/upload', express.static(dir));
 
 app.use(express.json())
@@ -41,7 +42,9 @@ const start = () => (
 
 // Sequelize code
 const main = async () =>{
-  await dbHandler.authenticate()
+  await dbHandler.sync()
+  // await dbHandler.alterTables() // Updates tables
+  // await dbHandler.forceTables() // Drops and then created tables again
   start()
 }
 

@@ -1,11 +1,13 @@
-const router = require('express').Router();
+
+import { Router,  Application} from 'express'
+
 const UserProfileController = require('./UserProfileController');
 const RouteConstant = require('../../constants/Routes');
 const Validation = require('../../validation/UserValidation')
 
+const router = Router();
 
-
-module.exports = (app) => {
+module.exports = (app:Application) => {
   router.route('/login').post(
       Validation.login(),
       UserProfileController.login

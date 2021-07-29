@@ -1,5 +1,6 @@
 const ethers =  require("ethers");
-const errorCodes = require('../constants/errorCodes')
+
+import { errorCodes } from '../constants/errorCodes';
 
 const testNetAPIKey = "c73b6bd1d01d4152a57d6c3d686ee9ff"
 const provider = new ethers.providers.InfuraProvider("rinkeby", testNetAPIKey)

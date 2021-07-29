@@ -1,5 +1,5 @@
 
-module.exports = {
+export = {
   "config":{
     "development": {
       "username": process.env.PEB_USR,

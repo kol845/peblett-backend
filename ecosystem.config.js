@@ -1,7 +1,7 @@
 module.exports = {
   apps: [{
     name: 'PROJECT_NAME',
-    script: "./src/server.js",
+    script: "./src/server.ts",
     instances: 1,
     watch: false,
     env_dev: {

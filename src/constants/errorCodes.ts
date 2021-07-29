@@ -1,4 +1,12 @@
-const errorCodes = {
+interface ErrorCodeType  {
+    
+        code:string,
+        message:string,
+        status:string
+    
+}
+
+const errorCodes:{[code: string]: ErrorCodeType} = {
     DUPLICATE_USER_ERROR: {
         code: 'DUPLICATE_USER_ERROR',
         message: 'The user already exists try another username',
@@ -65,4 +73,4 @@ const errorCodes = {
         status: '500'
     },
 }
-module.exports = errorCodes;
+export {errorCodes, ErrorCodeType};
