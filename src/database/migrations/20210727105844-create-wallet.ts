@@ -13,20 +13,20 @@ const up = async (queryInterface:any, Sequelize:any) => {
       defaultValue: DataTypes.UUIDV4,
       unique: true
     },
-    privateKey:{
+    address:{
       type:DataTypes.STRING,
       allowNull:false,
       unique: true
     },
-    userId:{
-      type:DataTypes.INTEGER,
-      allowNull:true
-    },
-    mnemonic:{
+    walletObj:{
       type:DataTypes.STRING,
       allowNull:false,
       unique: true
     },  
+    userId:{
+      type:DataTypes.INTEGER,
+      allowNull:true
+    },
     createdAt: {
       allowNull: false,
       type: Sequelize.DATE

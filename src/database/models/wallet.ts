@@ -14,8 +14,8 @@ module.exports = (sequelize:any, DataTypes:any) => {
      */
     id!:number;
     uuid!: string;
-    privateKey!: string;
-    mnemonic!: string;
+    address!: string;
+    walletObj!: string;
     static associate(models: any) {
       // define association here
       Wallet.belongsTo(models.User, {constraints: false})
@@ -35,12 +35,12 @@ module.exports = (sequelize:any, DataTypes:any) => {
       defaultValue: DataTypes.UUIDV4,
       unique: true
     },
-    privateKey:{
+    address:{
       type:DataTypes.STRING,
       allowNull:false,
       unique: true
     },
-    mnemonic:{
+    walletObj:{
       type:DataTypes.STRING,
       allowNull:false,
       unique: true

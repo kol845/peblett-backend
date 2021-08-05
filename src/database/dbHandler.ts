@@ -59,5 +59,34 @@ const registerUser = async (uname:string, email:string, passwd:string) => {
       }
   })
 }
+const createWallet = async (user:any, address:string,walletObj:any) => {
+  return new Promise( async (resolve, reject)=>{
+      try{
+        const walletString = JSON.stringify(walletObj)
+        const wallet = await db.Wallet.create({ address:address, walletObj:walletString})
+        user.setWallet(wallet)
+        resolve("Success")
+      }catch(err){
+        console.log(err)
+        reject(errorCodes.UNKNOWN_ERROR.code)
+      }
+  })
+}
+const getWallet = async (userId:string) => {
+  return new Promise( async (resolve, reject)=>{
+      try{
+        const user = await db.User.findOne({
+          where: {id:userId},
+        })
+        if(await user.getWallet() == undefined) reject(errorCodes.MISSING_WALLET.code)
+        else{
+          resolve(await user.getWallet())
+        }
+      }catch(err){
+        console.log(err)
+        reject(errorCodes.UNKNOWN_ERROR.code)
+      }
+  })
+}
 
-export default {alterTables, forceTables, sync, checkConnection, getUser, getUserWithUname, registerUser}
+export default {alterTables, forceTables, sync, checkConnection, getUser, getUserWithUname, registerUser, getWallet, createWallet}

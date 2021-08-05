@@ -32,7 +32,15 @@ const validateLogin = async (uname:string, passwd:string) =>{
 		throw errorCodes.UNSUCCESSFUL_LOGIN.code
 	}
 }
-
+const decodeToken = async(token:string)=>{
+	let decodedToken;
+	try{ // Validate Token
+		decodedToken = await jwsHandler.decodeToken(token)
+	}catch(error){
+		throw errorCodes.TOKEN_ERROR.code
+	}
+	return decodedToken.id
+}
 
 module.exports = {
 	login: async (req:Request, res:Response) => {
@@ -72,19 +80,26 @@ module.exports = {
 		let params = req.body;
 		let passwd = params["password"]
 
-		let token = req.headers['x-access-token'] || req.headers['authorization'];
-		let decodedToken;
+		let token:string = <string> req.headers['x-access-token']! || req.headers['authorization']!;
+		let userId:string;
 		try{ // Validate Token
-			decodedToken = await jwsHandler.decodeToken(token)
+			userId = await decodeToken(token)
 		}catch(error){
-			return respHandler.errorResponse(res, errorCodes.TOKEN_ERROR.code)
+			return respHandler.errorResponse(res, error)
 		}
-		const userId = decodedToken.id
-		try{ // Validate password
+		try{// Check if user already has wallet
+			await dbHandler.getWallet(userId);
+			return respHandler.errorResponse(res, errorCodes.WALLET_ALREADY_EXISTS.code)
+		}catch (errCode) { // Expecting 'MISSING_WALLET' error to be thrown
+			if(errCode != errorCodes.MISSING_WALLET.code) return respHandler.errorResponse(res, errCode)
+		}
+		try{ // Create and save wallet
 			const user = await dbHandler.getUser(userId)
 			await validateLogin(user.uname, passwd)
-			const wallet = etherHandler.createWallet();
-			return respHandler.successResponse(res, 200, "Wallet sucessfully created!")	
+			const wallet = await etherHandler.createWallet();
+
+			await dbHandler.createWallet(user, wallet.address, wallet);
+			return respHandler.successResponse(res, 200, {address:wallet.address})
 
 		}catch(err){
 			if(err === errorCodes.UNSUCCESSFUL_LOGIN.code) return respHandler.errorResponse(res, errorCodes.PASSWORD_INVALID.code)
@@ -92,6 +107,22 @@ module.exports = {
 		}
 
 	
+	},
+	getWallet: async (req:Request, res:Response) => {
+
+		let token:any = req.headers['x-access-token']! || req.headers['authorization']!;
+		let userId;
+		try{ // Validate Token
+			userId = await decodeToken(token)
+		}catch(error){
+			return respHandler.errorResponse(res, error)
+		}
+		try {
+			await dbHandler.getWallet(userId);
+			return respHandler.successResponse(res, 200, "Got wallet!")
+		} catch (errCode) {
+			return respHandler.errorResponse(res, errCode)
+		}
 	},
 }
 

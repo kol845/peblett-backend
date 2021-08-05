@@ -88,18 +88,26 @@ describe('POST /v1/user/login', () => {
 })
 
 describe('POST /v1/user/create-wallet', () => {
-  it('should respond with 200 status code', async()=>{
-    const response = await request(app).post('/v1/user/create-wallet').set('x-access-token', validToken).send({
-      password:"pebo"
-    })
-    expect(response.statusCode).toBe(200)
-  })
+
   it('should respond with 400 - PASSWORD_INVALID', async()=>{
     const response = await request(app).post('/v1/user/create-wallet').set('x-access-token', validToken).send({
       password:"fake-password"
     })
     expect(response.statusCode).toBe(400)
     expect(response.body.code).toBe(errorCodes.PASSWORD_INVALID.code)
+  })
+  it('should respond with 200 status code', async()=>{
+    const response = await request(app).post('/v1/user/create-wallet').set('x-access-token', validToken).send({
+      password:"pebo"
+    })
+    expect(response.statusCode).toBe(200)
+  })
+  it('should respond with 400 - WALLET_ALREADY_EXISTS', async()=>{
+    const response = await request(app).post('/v1/user/create-wallet').set('x-access-token', validToken).send({
+      password:"pebo"
+    })
+    expect(response.statusCode).toBe(400)
+    expect(response.body.code).toBe(errorCodes.WALLET_ALREADY_EXISTS.code)
   })
   it('should respond with 400 - TOKEN_ERROR', async()=>{
     const response = await request(app).post('/v1/user/create-wallet').set('x-access-token', "fake-token").send()

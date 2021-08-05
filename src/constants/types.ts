@@ -1,8 +1,8 @@
 export interface Wallet {
     id:number,
     uuid: string;
-    privateKey: string;
-    mnemonic: string;
+    address: string;
+    walletObj: string;
   }
 export interface User {
     id:number,

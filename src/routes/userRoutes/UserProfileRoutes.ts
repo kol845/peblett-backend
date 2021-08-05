@@ -13,6 +13,10 @@ module.exports = (app:Application) => {
     Validation.createWallet(),
     UserProfileController.createWallet
   );
+  router.route('/get-wallet').post(
+    checkToken,
+    UserProfileController.getWallet
+  );
   app.use(
     RouteConstant.USER,
     router

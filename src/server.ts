@@ -2,7 +2,8 @@ import chalk from 'chalk';
 import pack from '../package.json';
 import app from './app';
 
-
+// import dbHandler from './database/dbHandler'
+// dbHandler.alterTables()
 
 const port = process.env.PORT || 4100
 app.listen(port, () => {

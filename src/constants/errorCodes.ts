@@ -62,6 +62,16 @@ const errorCodes:{[code: string]: ErrorCodeType} = {
         message: 'The provided password did not match the token user account',
         status: '400'
     },
+    MISSING_WALLET: {
+        code: 'MISSING_WALLET',
+        message: 'The user has not created a wallet yet',
+        status: '400'
+    },
+    WALLET_ALREADY_EXISTS: {
+        code: 'WALLET_ALREADY_EXISTS',
+        message: 'The user already has a wallet',
+        status: '400'
+    },
     UNKNOWN_ERROR: {
         code: 'UNKNOWN_ERROR',
         message: 'A Unknown error occured',
