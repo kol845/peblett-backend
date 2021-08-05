@@ -8,8 +8,10 @@
     "staging": "cross-env NODE_ENV=staging  nodemon --inspect=5001 --config nodemon.js --delay 1500ms --exec 'ts-node src/server.ts'",
     "production": "cross-env NODE_ENV=production  nodemon --inspect=5001 --config nodemon.js --delay 1500ms --exec 'ts-node src/server.ts'",
     "debug": "cross-env NODE_ENV=dev nodemon --inspect=5001 --config nodemon.js --delay 1500ms --exec 'ts-node src/server.ts'",
-    "build": "tsc -p tsconfig.json"
+    "build": "tsc -p tsconfig.json",
+    "test": "cross-env NODE_ENV=test jest — testTimeout=10000 ./src"
   },
+
   "author": "",
   "license": "ISC",
   "dependencies": {
@@ -35,7 +37,11 @@
     "web3": "^1.3.5"
   },
   "devDependencies": {
-    "@types/node": "^12.20.11",
+    "@types/cors": "^2.8.12",
+    "@types/express": "^4.17.13",
+    "@types/jest": "^26.0.24",
+    "@types/node": "^12.20.19",
+    "@types/supertest": "^2.0.11",
     "@types/validator": "^13.6.3",
     "cross-env": "^7.0.3",
     "eslint": "7.17.0",
@@ -45,7 +51,10 @@
     "eslint-plugin-node": "11.1.0",
     "eslint-plugin-promise": "4.2.1",
     "eslint-plugin-standard": "5.0.0",
+    "jest": "^27.0.6",
     "nodemon": "^2.0.7",
+    "supertest": "^6.1.4",
+    "ts-jest": "^27.0.4",
     "ts-node": "^10.1.0",
     "typescript": "^4.3.5"
   }

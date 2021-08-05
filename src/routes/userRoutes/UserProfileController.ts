@@ -60,7 +60,7 @@ module.exports = {
 		const hash = bcrypt.hashSync(passwd, 10);
 		try {
 			await dbHandler.registerUser(uname, email, hash);
-			return respHandler.successResponse(res, 201, "New user successufully created")
+			return respHandler.successResponse(res, 200, "New user successufully created")
 		} catch (errCode) {
 			return respHandler.errorResponse(res, errCode)
 		}
@@ -74,20 +74,21 @@ module.exports = {
 
 		let token = req.headers['x-access-token'] || req.headers['authorization'];
 		let decodedToken;
-		try{
+		try{ // Validate Token
 			decodedToken = await jwsHandler.decodeToken(token)
 		}catch(error){
 			return respHandler.errorResponse(res, errorCodes.TOKEN_ERROR.code)
 		}
 		const userId = decodedToken.id
-		try{
+		try{ // Validate password
 			const user = await dbHandler.getUser(userId)
-
+			await validateLogin(user.uname, passwd)
 			const wallet = etherHandler.createWallet();
-			return respHandler.successResponse(res, 201, "Wallet sucessfully created!")	
+			return respHandler.successResponse(res, 200, "Wallet sucessfully created!")	
 
 		}catch(err){
-			return respHandler.errorResponse(res, err)
+			if(err === errorCodes.UNSUCCESSFUL_LOGIN.code) return respHandler.errorResponse(res, errorCodes.PASSWORD_INVALID.code)
+			else return respHandler.errorResponse(res, err)
 		}
 
 	

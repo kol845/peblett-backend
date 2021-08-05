@@ -57,6 +57,11 @@ const errorCodes:{[code: string]: ErrorCodeType} = {
         message: 'Invalid token found',
         status: '400'
     },
+    PASSWORD_INVALID: {
+        code: 'PASSWORD_INVALID',
+        message: 'The provided password did not match the token user account',
+        status: '400'
+    },
     UNKNOWN_ERROR: {
         code: 'UNKNOWN_ERROR',
         message: 'A Unknown error occured',
